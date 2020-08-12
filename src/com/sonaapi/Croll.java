@@ -5,6 +5,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+import java.util.concurrent.TimeUnit;
 
 public class Croll {
     private static WebDriver driver;
@@ -16,13 +19,32 @@ public class Croll {
         this.itemcode = itemcode;
 
         System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
-        driver = new ChromeDriver();
+
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
+        chromeOptions.addArguments("--no-sandbox");
+        driver = new ChromeDriver(chromeOptions);
         // url = https://www.coupang.com/vp/products/7215502
         String url = "https://www.coupang.com/vp/products/"+this.itemcode;
         driver.get(url);
-        WebElement itemnametag = driver.findElement(By.className("prod-buy-header__title"));
-        String itemname = itemnametag.getText();
-        System.out.println(itemname);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        try {
+            WebElement itemnametag = driver.findElement(By.className("prod-buy-header__title"));
+            String itemname = itemnametag.getText();
+            System.out.println(itemname);
+
+            /*
+            WebElement itemstatustag = driver.findElement(By.className("oos-label"));
+            String itemstatus = itemstatustag.getText();
+            System.out.println(itemstatus);
+
+            */
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+
 
         driver.quit();
     }
